@@ -284,19 +284,34 @@ class Astra_Target_Rules_Fields {
 	 * @param string $key User option key.
 	 * @return string
 	 */
-	public static function get_user_by_key( $key ) {
-		if ( ! isset( self::$user_selection ) || empty( self::$user_selection ) ) {
-			self::$user_selection = self::get_user_selections();
-		}
-		$user_selection = self::$user_selection;
+	
+	// public static function get_user_by_key( $key ) {
+	// 	if ( ! isset( self::$user_selection ) || empty( self::$user_selection ) ) {
+	// 		self::$user_selection = self::get_user_selections();
+	// 	}
+	// 	$user_selection = self::$user_selection;
 
-		if ( isset( $user_selection['basic']['value'][ $key ] ) ) {
-			return $user_selection['basic']['value'][ $key ];
-		} elseif ( $user_selection['advanced']['value'][ $key ] ) {
-			return $user_selection['advanced']['value'][ $key ];
-		}
-		return $key;
+	// 	if ( isset( $user_selection['basic']['value'][ $key ] ) ) {
+	// 		return $user_selection['basic']['value'][ $key ];
+	// 	} elseif ( $user_selection['advanced']['value'][ $key ] ) {
+	// 		return $user_selection['advanced']['value'][ $key ];
+	// 	}
+	// 	return $key;
+	// }
+
+    public static function get_user_by_key( $key ) {
+	if ( empty( self::$user_selection ) ) {
+		self::$user_selection = self::get_user_selections();
 	}
+
+	foreach ( ['basic', 'advanced'] as $type ) {
+		if ( isset( self::$user_selection[ $type ]['value'][ $key ] ) ) {
+			return self::$user_selection[ $type ]['value'][ $key ];
+		}
+	}
+
+	return $key;
+}
 
 	/**
 	 * Ajax handeler to return the posts based on the search query.
